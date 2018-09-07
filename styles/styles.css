@@ -1,2 +1,5 @@
-html 
-{ background: black; }
+html{
+  background: black; }
+canvas{
+  margin:auto;
+}
