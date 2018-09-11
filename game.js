@@ -11,9 +11,12 @@ let jumpButton;
 // add platforms to game
 function createPlatforms() {
   platforms = game.add.physicsGroup();
-  platforms.setAll('body.immovable', true);
+ 
 
   platforms.create(500, 550, 'platform');
+
+  // platform does not move when collided with. *this code **AFTER** platforms have been positioned
+  platforms.setAll('body.immovable', true);
 }
 
 // Stars to display in game
@@ -77,6 +80,24 @@ window.onload = function () {
 
   function update() {
     game.physics.arcade.collide(player, platforms);
+
+    if (cursors.right.isDown) {
+      // sprite walks when right key is pressed
+      player.animations.play('walk', 10, true);
+      // walks 350px per second in positive direction
+      player.body.velocity.x = 350;
+      // sprite body stays in positive scale 1 
+      player.scale.x = 1;
+    }
+
+    else if (cursors.left.isDown) {
+      // sprite walks when left key is pressed
+      player.animations.play('walk', 10, true);
+      // walks 350px per second in negative direction
+      player.body.velocity.x = -350;
+      // sprite body turns left
+      player.scale.x = - 1;
+    }
   
   }
 
