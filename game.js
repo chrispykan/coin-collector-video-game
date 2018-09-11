@@ -1,7 +1,7 @@
 let game;
 let player;
 let platforms;
-let stars;
+let items;
 let scoreDisplay;
 let currentScore = 0;
 let cursors;
@@ -12,35 +12,32 @@ let jumpButton;
 function createPlatforms() {
   platforms = game.add.physicsGroup();
  
-
   platforms.create(500, 550, 'platform');
 
   // platform does not move when collided with. *this code **AFTER** platforms have been positioned
   platforms.setAll('body.immovable', true);
 }
 
-// Stars to display in game
-function createStars() {
-  stars = game.add.physicsGroup();
+// add animated items to display in game
+function addItems() {
+  items = game.add.physicsGroup();
 
-  starCreate(315, 100, 'star');
+  createItem(315, 100, 'star');
 }
 
-// create stars with animations
-function starCreate(left, top, starImage) {
-  let star = stars.create(left, top, starImage);
-  star.animations.add('spin');
-  star.animations.play('spin', 10, true);
-
+// create items with animations
+function createItem(left, top, image) {
+  let item = items.create(left, top, image);
+  item.animations.add('spin');
+  item.animations.play('spin', 10, true);
 }
- 
 
                                 ///////////SETUP///////////
 
 // seting up a phaser game when the page loads
 window.onload = function () {
   game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update, render: render });
-  // will load befor the game begins
+  // will load before the game begins
   function preload() {
     // background color
     game.stage.backgroundColor = '#7ce0f9';
@@ -55,8 +52,7 @@ window.onload = function () {
     game.load.spritesheet('poion', './assets/poison.png', 32, 32);
     
   }
-  function create(){
-    
+  function create(){ 
      // create and position sprite
     player = game.add.sprite(30, 600, 'dude');
     // middle of sprite in x direction, bottom of sprite in y direction
@@ -67,12 +63,8 @@ window.onload = function () {
     game.physics.arcade.enable(player);
     //sprite stops at edges
     player.body.collideWorldBounds = true;
-
-   
-    createPlatforms();
-    createStars();
-    
-    
+    // sprite jump gravity velocity
+    player.body.gravity.y = 500;
 
     //  score display
     scoreDisplay = game.add.text(20, 20, "SCORE:" + currentScore, { font: "bold 20px Press Start 2P", fill: "white" });
@@ -80,10 +72,15 @@ window.onload = function () {
     // keyboard input to play game
     cursors = game.input.keyboard.createCursorKeys();
     jumpButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+
+    createPlatforms();
+    addItems();
   }
 
   function update() {
     game.physics.arcade.collide(player, platforms);
+    // Reset the sprite's movement
+    player.body.velocity.x = 0;
 
     if (cursors.right.isDown) {
       // sprite walks when right key is pressed
@@ -93,7 +90,6 @@ window.onload = function () {
       // sprite body stays in positive scale 1 
       player.scale.x = 1;
     }
-
     else if (cursors.left.isDown) {
       // sprite walks when left key is pressed
       player.animations.play('walk', 10, true);
@@ -102,12 +98,16 @@ window.onload = function () {
       // sprite body turns left
       player.scale.x = - 1;
     }
- 
-  
+    else {
+      //  stand still
+      player.animations.stop();
+    }
+    if (jumpButton.isDown && (player.body.onFloor() || player.body.touching.down)) {
+      player.body.velocity.y = -400;
+    }
   }
 
   function render() {
-
   }
 
 };
