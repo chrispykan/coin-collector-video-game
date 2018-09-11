@@ -23,7 +23,7 @@ function createPlatforms() {
 function createStars() {
   stars = game.add.physicsGroup();
 
-  StarsCreate(450, 550, 'star');
+  starCreate(315, 100, 'star');
 }
 
 // create stars with animations
@@ -68,7 +68,11 @@ window.onload = function () {
     //sprite stops at edges
     player.body.collideWorldBounds = true;
 
+   
     createPlatforms();
+    createStars();
+    
+    
 
     //  score display
     scoreDisplay = game.add.text(20, 20, "SCORE:" + currentScore, { font: "bold 20px Press Start 2P", fill: "white" });
@@ -98,6 +102,7 @@ window.onload = function () {
       // sprite body turns left
       player.scale.x = - 1;
     }
+ 
   
   }
 
