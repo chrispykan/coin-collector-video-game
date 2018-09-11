@@ -1,38 +1,42 @@
 let game;
 let player;
 let platforms;
-let items;
-var text;
-var currentScore = 0;
+let stars;
+let scoreDisplay;
+let currentScore = 0;
+let cursors;
+let jumpButton;
+
                                 ///////////FUNCTIONS///////////
-
-// create an item and to screen
-function createItem(left, top, image){
-  let item = items.create(left, top, image)
-  item.animations.add('spin');
-  item.animations.play('spin', 10, true);;
-  }
-
-// add items to collect in the game
-function addItems() {
-  items = game.add.physicsGroup();
-  createItem(375, 400, 'coin');
-  createItem(375, 100, 'poison');
-  createItem(125, 50, 'star');
-}
-
 // add platforms to game
-function addPlatforms() {
-  platforms.create = game.add.physicsGroup();
+function createPlatforms() {
+  platforms = game.add.physicsGroup();
   platforms.setAll('body.immovable', true);
-  platforms.create(450, 550, 'platform');
+
+  platforms.create(500, 550, 'platform');
+}
+
+// Stars to display in game
+function createStars() {
+  stars = game.add.physicsGroup();
+
+  StarsCreate(450, 550, 'star');
+}
+
+// create stars with animations
+function starCreate(left, top, starImage) {
+  let star = stars.create(left, top, starImage);
+  star.animations.add('spin');
+  star.animations.play('spin', 10, true);
 
 }
+ 
+
                                 ///////////SETUP///////////
 
 // seting up a phaser game when the page loads
 window.onload = function () {
-  game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
+  game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update, render: render });
   // will load befor the game begins
   function preload() {
     // background color
@@ -49,22 +53,36 @@ window.onload = function () {
     
   }
   function create(){
-    // Enable the Arcade Physics system
-    game.physics.startSystem(Phaser.Physics.ARCADE);
+    
      // create and position sprite
     player = game.add.sprite(30, 600, 'dude');
     // middle of sprite in x direction, bottom of sprite in y direction
     player.anchor.setTo(0.5, 1);
-  
+    // sprite can walk
+    player.animations.add('walk');
+    // Enable the Arcade Physics system **AFTER** SPRITE SETTINGS
+    game.physics.arcade.enable(player);
+    //sprite stops at edges
+    player.body.collideWorldBounds = true;
 
+    createPlatforms();
 
     //  score display
-    text = game.add.text(20, 20, "SCORE: " + currentScore, { font: "bold 24px Arial", fill: "white" });
+    scoreDisplay = game.add.text(20, 20, "SCORE:" + currentScore, { font: "bold 20px Press Start 2P", fill: "white" });
+   
+    // keyboard input to play game
+    cursors = game.input.keyboard.createCursorKeys();
+    jumpButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
   }
 
-  function update(){
- 
+  function update() {
+    game.physics.arcade.collide(player, platforms);
+  
+  }
+
+  function render() {
 
   }
+
 };
 
