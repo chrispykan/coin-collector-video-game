@@ -6,7 +6,6 @@ let scoreDisplay;
 let currentScore = 0;
 let cursors;
 let jumpButton;
-
                                 ///////////FUNCTIONS///////////
 // add platforms to game
 function createPlatforms() {
@@ -23,6 +22,8 @@ function addItems() {
   items = game.add.physicsGroup();
 
   createItem(315, 100, 'star');
+  createItem(600, 500, 'coin');
+  createItem(400, 450, 'poison');
 }
 
 // create items with animations
@@ -32,6 +33,23 @@ function createItem(left, top, image) {
   item.animations.play('spin', 10, true);
 }
 
+
+                                ///////////HANDLERS///////////
+function itemCollect(player, item) {
+    item.kill();
+    if (item.key === 'coin') {
+       currentScore = currentScore + 10;
+    } 
+    else if (item.key === 'star') {
+       currentScore = currentScore + 25;
+    } 
+    else if (item.key === 'poison') {
+       currentScore = currentScore - 25;
+    }
+  }
+
+
+                            
                                 ///////////SETUP///////////
 
 // seting up a phaser game when the page loads
@@ -49,7 +67,7 @@ window.onload = function () {
     game.load.spritesheet('coin', './assets/coin.png', 36, 44);
     game.load.spritesheet('token', './assets/token.png', 42, 54);
     game.load.spritesheet('star', './assets/star.png', 32, 32);
-    game.load.spritesheet('poion', './assets/poison.png', 32, 32);
+    game.load.spritesheet('poison', './assets/poison.png', 32, 32);
     
   }
   function create(){ 
@@ -67,7 +85,7 @@ window.onload = function () {
     player.body.gravity.y = 500;
 
     //  score display
-    scoreDisplay = game.add.text(20, 20, "SCORE:" + currentScore, { font: "bold 20px Press Start 2P", fill: "white" });
+    scoreDisplay = game.add.text(20, 20, "SCORE:" + currentScore, { font: "24px Press Start 2P", fill: "white" });
    
     // keyboard input to play game
     cursors = game.input.keyboard.createCursorKeys();
@@ -78,9 +96,15 @@ window.onload = function () {
   }
 
   function update() {
+    // update score when items are collected
+   scoreDisplay.text = "SCORE:" + currentScore;
+    // if sprite collides with platform
     game.physics.arcade.collide(player, platforms);
+    // when sprite collects items
+    game.physics.arcade.overlap(player, items, itemCollect);
     // Reset the sprite's movement
     player.body.velocity.x = 0;
+    
 
     if (cursors.right.isDown) {
       // sprite walks when right key is pressed
@@ -111,4 +135,3 @@ window.onload = function () {
   }
 
 };
-
