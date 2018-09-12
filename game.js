@@ -1,55 +1,78 @@
 let game;
 let player;
 let platforms;
+let poisons;
 let items;
 let scoreDisplay;
 let currentScore = 0;
 let cursors;
 let jumpButton;
+let token;
+let livesDisplay;
+let currentLives = 3;
+
+
                                 ///////////FUNCTIONS///////////
 // add platforms to game
 function createPlatforms() {
   platforms = game.add.physicsGroup();
- 
+
+  //  place platforms
   platforms.create(500, 550, 'platform');
 
   // platform does not move when collided with. *this code **AFTER** platforms have been positioned
   platforms.setAll('body.immovable', true);
 }
 
-// add animated items to display in game
+function createPoisons() {
+  poisons = game.add.physicsGroup();
+
+  // place poisons
+  poisonCreate(550, 500, 'poison');
+
+}
+
+// add spinnning animated items to display in game (coins and stars)
 function addItems() {
   items = game.add.physicsGroup();
 
+  // place items(coins and stars)
   createItem(315, 100, 'star');
   createItem(600, 500, 'coin');
-  createItem(400, 450, 'poison');
 }
 
-// create items with animations
+// create items with spin animations  (star and coin)
 function createItem(left, top, image) {
   let item = items.create(left, top, image);
   item.animations.add('spin');
   item.animations.play('spin', 10, true);
 }
 
+// create poison with bubble animation
+function poisonCreate(left, top, poisonImage){
+  let poison = poisons.create(left, top, poisonImage);
+  poison.animations.add('bubble');
+  poison.animations.play('bubble', 10, true);
+}
+  
+  
 
-                                ///////////HANDLERS///////////
+ 
+                              ///////////HANDLERS///////////
 function itemCollect(player, item) {
-    item.kill();
-    if (item.key === 'coin') {
-       currentScore = currentScore + 10;
-    } 
-    else if (item.key === 'star') {
-       currentScore = currentScore + 25;
-    } 
-    else if (item.key === 'poison') {
-       currentScore = currentScore - 25;
-    }
-  }
+  item.kill();
+  if (item.key === 'coin') {
+    currentScore = currentScore + 10;
+  } 
+  else if (item.key === 'star') {
+    currentScore = currentScore + 25;
+  } 
+}
 
-
-                            
+function poisonCollect(player, poison) {
+  poison.kill();
+  currentLives = currentLives - 1;
+}
                                 ///////////SETUP///////////
 
 // seting up a phaser game when the page loads
@@ -85,25 +108,31 @@ window.onload = function () {
     player.body.gravity.y = 500;
 
     //  score display
-    scoreDisplay = game.add.text(20, 20, "SCORE:" + currentScore, { font: "24px Press Start 2P", fill: "white" });
-   
+    scoreDisplay = game.add.text(16, 16, "SCORE:" + currentScore, { font: "20px Press Start 2P", fill: "white" });
+    // display sprite lives
+    livesDisplay = game.add.text(645, 16, "LIVES:" + currentLives, { font: "20px Press Start 2P", fill: "white" });  
     // keyboard input to play game
     cursors = game.input.keyboard.createCursorKeys();
     jumpButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 
     createPlatforms();
     addItems();
+    createPoisons();
   }
 
   function update() {
-    // update score when items are collected
-   scoreDisplay.text = "SCORE:" + currentScore;
     // if sprite collides with platform
     game.physics.arcade.collide(player, platforms);
-    // when sprite collects items
+    // when sprite collects items ( coins and stars)
     game.physics.arcade.overlap(player, items, itemCollect);
+    // when sprite collects poison
+    game.physics.arcade.overlap(player, poisons, poisonCollect);
     // Reset the sprite's movement
     player.body.velocity.x = 0;
+     // update score when items are collected
+    scoreDisplay.text = "SCORE:" + currentScore;
+    // update lives if poison is collected
+    livesDisplay.text = "LIVES:" + currentLives;
     
 
     if (cursors.right.isDown) {
