@@ -1,15 +1,19 @@
 let game;
 let player;
 let platforms;
-let poisons;
 let items;
+let poisons;
+let tokens;
 let scoreDisplay;
 let currentScore = 0;
 let cursors;
 let jumpButton;
-let token;
 let livesDisplay;
 let currentLives = 3;
+let won = false;
+let winMessage;
+let winningScore = 100;
+
 
 
                                 ///////////FUNCTIONS///////////
@@ -32,20 +36,29 @@ function createPoisons() {
 
 }
 
-// add spinnning animated items to display in game (coins and stars)
+// add spinnning animated items to display in game (coins, stars)
 function addItems() {
   items = game.add.physicsGroup();
 
   // place items(coins and stars)
   createItem(315, 100, 'star');
   createItem(600, 500, 'coin');
+  createItem(600, 500, 'coin');
+  createItem(600, 500, 'coin');
+  createItem(600, 500, 'coin');
+  createItem(600, 500, 'coin');
+  createItem(600, 500, 'coin');
+  createItem(600, 500, 'coin');
+  createItem(600, 500, 'coin');
+  createItem(600, 500, 'coin');
+  createItem(600, 500, 'coin');
 }
 
-// create items with spin animations  (star and coin)
+// create items with spin animations  (stars and coins )
 function createItem(left, top, image) {
   let item = items.create(left, top, image);
   item.animations.add('spin');
-  item.animations.play('spin', 10, true);
+  item.animations.play('spin', 8, true);
 }
 
 // create poison with bubble animation
@@ -54,7 +67,12 @@ function poisonCreate(left, top, poisonImage){
   poison.animations.add('bubble');
   poison.animations.play('bubble', 10, true);
 }
-  
+// token function is separate from other spinning items as I call it only at the end
+function createToken(left, top, image) {
+  let token = tokens.create(750, 500, 'token');
+  token.animations.add('spin');
+  token.animations.play('spin', 8, true);
+}
   
 
  
@@ -67,11 +85,19 @@ function itemCollect(player, item) {
   else if (item.key === 'star') {
     currentScore = currentScore + 25;
   } 
+  if (currentScore === winningScore) {
+    createToken();
+  }
 }
-
+// remove poison from display when collected
 function poisonCollect(player, poison) {
   poison.kill();
   currentLives = currentLives - 1;
+}
+// remove token from display when collected and win the game
+function tokenCollect (player, token) {
+  token.kill();
+  won = true;
 }
                                 ///////////SETUP///////////
 
@@ -127,6 +153,8 @@ window.onload = function () {
     game.physics.arcade.overlap(player, items, itemCollect);
     // when sprite collects poison
     game.physics.arcade.overlap(player, poisons, poisonCollect);
+    // //  when win token is created
+    game.physics.arcade.overlap(player, tokens, tokenCollect);
     // Reset the sprite's movement
     player.body.velocity.x = 0;
      // update score when items are collected
