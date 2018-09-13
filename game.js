@@ -1,3 +1,4 @@
+// Dev: Chris Kanyotu - www.github.com/chrispykan
 let game;
 let player;
 let platforms;
@@ -34,8 +35,8 @@ function createPoisons() {
 
   // place poisons
   poisonCreate(550, 500, 'poison');
-  poisonCreate(530, 500, 'poison');
-  poisonCreate(520, 500, 'poison');
+  // poisonCreate(530, 500, 'poison');
+  // poisonCreate(520, 500, 'poison');
 }
 
 // add spinnning animated items to display in game (coins, stars)
@@ -44,17 +45,17 @@ function addItems() {
 
   // place items(coins and stars)
   createItem(315, 100, 'star');
-  // createItem(600, 500, 'coin');
-  // createItem(550, 500, 'coin');
-  // createItem(800, 500, 'coin');
-  // createItem(700, 500, 'coin');
-  // createItem(600, 500, 'coin');
-  // createItem(100, 500, 'coin');
-  // createItem(200, 500, 'coin');
-  // createItem(300, 500, 'coin');
-  // createItem(400, 500, 'coin');
-  // createItem(500, 500, 'coin');
-  // createItem(450, 500, 'coin');
+  createItem(600, 500, 'coin');
+  createItem(550, 500, 'coin');
+  createItem(800, 500, 'coin');
+  createItem(700, 500, 'coin');
+  createItem(600, 500, 'coin');
+  createItem(100, 500, 'coin');
+  createItem(200, 500, 'coin');
+  createItem(300, 500, 'coin');
+  createItem(400, 500, 'coin');
+  createItem(500, 500, 'coin');
+  createItem(450, 500, 'coin');
 }
 
 // create items with spin animations  (stars and coins )
@@ -202,10 +203,10 @@ window.onload = function () {
       player.body.velocity.y = -400;
     }
     if (won) {
-      message.text = "  YAY!\nYOU WON!";
+      message.text = "  YAY!\n\nYOU WON!";
     }
     if (gameOver) {
-      message.text ="        x_x\nYOU DIED.TRY AGAIN!"
+      message.text ="        x_x\n\nYOU DIED.TRY AGAIN!"
     }
   }
 
