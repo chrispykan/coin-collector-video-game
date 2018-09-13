@@ -13,6 +13,7 @@ let currentLives = 3;
 let won = false;
 let winMessage;
 let winningScore = 100;
+let gameOver = false;
 
 
 
@@ -43,15 +44,16 @@ function addItems() {
   // place items(coins and stars)
   createItem(315, 100, 'star');
   createItem(600, 500, 'coin');
+  createItem(550, 500, 'coin');
+  createItem(800, 500, 'coin');
+  createItem(700, 500, 'coin');
   createItem(600, 500, 'coin');
-  createItem(600, 500, 'coin');
-  createItem(600, 500, 'coin');
-  createItem(600, 500, 'coin');
-  createItem(600, 500, 'coin');
-  createItem(600, 500, 'coin');
-  createItem(600, 500, 'coin');
-  createItem(600, 500, 'coin');
-  createItem(600, 500, 'coin');
+  createItem(100, 500, 'coin');
+  createItem(200, 500, 'coin');
+  createItem(300, 500, 'coin');
+  createItem(400, 500, 'coin');
+  createItem(500, 500, 'coin');
+  createItem(450, 500, 'coin');
 }
 
 // create items with spin animations  (stars and coins )
@@ -69,6 +71,7 @@ function poisonCreate(left, top, poisonImage){
 }
 // token function is separate from other spinning items as I call it only at the end
 function createToken(left, top, image) {
+  tokens = game.add.physicsGroup();
   let token = tokens.create(750, 500, 'token');
   token.animations.add('spin');
   token.animations.play('spin', 8, true);
@@ -87,6 +90,7 @@ function itemCollect(player, item) {
   } 
   if (currentScore === winningScore) {
     createToken();
+    
   }
 }
 // remove poison from display when collected
@@ -136,10 +140,14 @@ window.onload = function () {
     //  score display
     scoreDisplay = game.add.text(16, 16, "SCORE:" + currentScore, { font: "20px Press Start 2P", fill: "white" });
     // display sprite lives
-    livesDisplay = game.add.text(645, 16, "LIVES:" + currentLives, { font: "20px Press Start 2P", fill: "white" });  
+    livesDisplay = game.add.text(645, 16, "LIVES:" + currentLives, { font: "20px Press Start 2P", fill: "white" });
+    // display winning message
+    winMessage = game.add.text(game.world.centerX, 250, "", { font: "40px Press Start 2P", fill: "white" });
+    winMessage.anchor.setTo(0.5, 1);
     // keyboard input to play game
     cursors = game.input.keyboard.createCursorKeys();
     jumpButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+  
 
     createPlatforms();
     addItems();
@@ -185,6 +193,9 @@ window.onload = function () {
     }
     if (jumpButton.isDown && (player.body.onFloor() || player.body.touching.down)) {
       player.body.velocity.y = -400;
+    }
+    if (won) {
+      winMessage.text = "YAY, YOU WON!";
     }
   }
 
