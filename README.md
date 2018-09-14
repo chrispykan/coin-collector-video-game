@@ -11,9 +11,11 @@ Have fun!
 
 * Phaser (Version: 2.6.2 - "Kore Springs")
  
-* Javascript (Vanilla)
+* Javascript
  
-* CSS
+* CSS3
+
+* HTML5
  
 ## installation Steps:
 This version of Phaser runs best in the Firefox browser. If on Chrome, run the game in a local web server
