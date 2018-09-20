@@ -24,7 +24,18 @@ function createPlatforms() {
   platforms = game.add.physicsGroup();
 
   //  place platforms
-  platforms.create(500, 550, 'platform');
+  platforms.create(450, 550, 'platform');
+  platforms.create(100, 550, 'platform');
+  platforms.create(300, 450, 'platform');
+  platforms.create(250, 150, 'platform');
+  platforms.create(50, 300, 'platform');
+  platforms.create(150, 250, 'platform');
+  platforms.create(650, 300, 'platform');
+  platforms.create(550, 200, 'platform2');
+  platforms.create(300, 450, 'platform2');
+  platforms.create(400, 350, 'platform2');
+  platforms.create(100, 100, 'platform2');
+
 
   // platform does not move when collided with. *this code **AFTER** platforms have been positioned
   platforms.setAll('body.immovable', true);
@@ -34,9 +45,9 @@ function createPoisons() {
   poisons = game.add.physicsGroup();
 
   // place poisons
-  poisonCreate(550, 500, 'poison');
-  // poisonCreate(530, 500, 'poison');
-  // poisonCreate(520, 500, 'poison');
+  poisonCreate(375, 100, 'poison');
+  poisonCreate(370,500,'poison');
+  poisonCreate(100, 375, 'poison');
 }
 
 // add spinnning animated items to display in game (coins, stars)
@@ -44,18 +55,15 @@ function addItems() {
   items = game.add.physicsGroup();
 
   // place items(coins and stars)
-  createItem(315, 100, 'star');
-  createItem(600, 500, 'coin');
-  createItem(550, 500, 'coin');
-  createItem(800, 500, 'coin');
-  createItem(700, 500, 'coin');
-  createItem(600, 500, 'coin');
-  createItem(100, 500, 'coin');
-  createItem(200, 500, 'coin');
-  createItem(300, 500, 'coin');
-  createItem(400, 500, 'coin');
-  createItem(500, 500, 'coin');
-  createItem(450, 500, 'coin');
+  createItem(375, 400, 'coin');
+  createItem(575, 500, 'coin');
+  createItem(225, 500, 'coin');
+  createItem(100, 250, 'coin');
+  createItem(575, 150, 'coin');
+  createItem(525, 300, 'coin');
+  createItem(650, 250, 'coin');
+  createItem(225, 200, 'coin');
+  createItem(125, 50, 'star');
 }
 
 // create items with spin animations  (stars and coins )
@@ -78,8 +86,6 @@ function createToken(left, top, image) {
   token.animations.add('spin');
   token.animations.play('spin', 8, true);
 }
-  
-
  
                               ///////////HANDLERS///////////
 function itemCollect(player, item) {
